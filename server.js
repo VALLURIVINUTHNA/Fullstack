@@ -30,7 +30,6 @@ app.get("/signup.html", (req, res) => {
       res.sendFile(__dirname+"/login.html");
   });
 
-// ...
 
 app.post("/signupsubmit", function (req, res) {
     const fullname = req.body.fullname;
@@ -39,7 +38,6 @@ app.post("/signupsubmit", function (req, res) {
     if (!fullname || !email || !password) {
         return res.send("Please provide all required information.");
       }
-  // Check if the email or fullname already exists
   db.collection("userDemo")
     .where("email", "==", email)
     .get()
@@ -55,10 +53,10 @@ app.post("/signupsubmit", function (req, res) {
             if (!fullnameDocs.empty) {
               res.send("An account with this fullname already exists.");
             } else {
-              // Hash the password before storing it
+              
               const hashedPassword = passwordHash.generate(password);
 
-              // Add user to Firestore
+              
               db.collection("userDemo")
                 .add({
                   fullname,
@@ -90,12 +88,12 @@ app.post("/loginsubmit", function (req, res) {
     const password = req.body.pwd;
     console.log(password);
   
-    // Check if any of the required fields is undefined
+    
     if (!email || !password) {
       return res.send("Please provide both fullname and password.");
     }
   
-    // Retrieve the user with the given fullname
+    
     db.collection("userDemo")
       .where("email", "==", email)
       .get()
@@ -103,7 +101,6 @@ app.post("/loginsubmit", function (req, res) {
         if (!docs.empty) {
           const user = docs.docs[0].data();
   
-          // Verify the provided password with the stored hashed password
           if (passwordHash.verify(password, user.password)) {
             res.sendFile(__dirname + "/dashboard.html");
           } else {
